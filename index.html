@@ -8,16 +8,13 @@
 	<link href='http://fonts.googleapis.com/css?family=Voltaire' rel='stylesheet' type='text/css'>
 	<link rel='stylesheet' href='demo/main.css'>
 
-	<!-- TODO add styles specific to this demo -->
 	<style type='text/css'>
 
         body {
-            max-width: none;
-            min-width: auto;
+            max-width: 1000px;
         }
         header {
             max-width:48em;
-            min-width: 32em;
             margin: 0 auto;
         }
 
@@ -32,31 +29,49 @@
             z-index: -1;
         }
 
+        .list {
+            list-style: none;
+            margin:0;
+            padding:0;
+            background:#efefef;
+            overflow: hidden;
+        }
+
+        .list2,
+        .list3 {
+            width:75%;
+            float:left;
+        }
+        .list3 {
+            width:25%;
+        }
+
 
         /* usage */
-        [data-min-width~="400"] {
-            background: #366097;
+        [data-min-width~="400"] li {
+            float:left;
+            text-align: center;
+            background:#f7f7f7;
+            width:50%;
+            height:200px;
+            line-height: 200px;
         }
-        [data-min-width~="500"] {
-            background: #0d3349;
+        .list[data-min-width~="600"] li {
+            width:33.33%;
         }
 
-        [data-max-width~="300"]{
-            background:red;
-        }
-        [data-max-width~="400"]{
-            background:#ff6600;
+        .list[data-max-width~="200"] li{
+            color:red;
         }
 	</style>
 </head>
 
 <body>
 
-	<!-- if the project is on GitHub, add a fork me button! -->
-	<!-- <a class='forkme' href='https://github.com/you/repo'>Fork me on GitHub</a> -->
+	<a class='forkme' href='https://github.com/cfenzo/Ractive-decorators-minmaxwidth'>Fork me on GitHub</a>
 
 	<header>
-		<h1>Ractive.js minmaxwidth decorator plugin</h1>
+		<h1>Ractive.js minmaxwidth decorator</h1>
 		<p class='strap'>
 			<span class='download'>download: <a href='[TODO]'>Ractive-decorators-minmaxwidth.js</a></span>
 			<span class='more-plugins'>more plugins at <a href='http://ractivejs.org/plugins'>ractivejs.org/plugins</a></span>
@@ -64,7 +79,8 @@
 	</header>
 
 	<main>
-		<p>TODO A description of the plugin goes here...</p>
+		<p>This decorator enables element-based media-queries for min-/max-width.<br>PS. It only supports px values</p>
+        <p>Resize the window to see the color of the text change.</p>
 
 		<div id='demo' class='clearfix'></div>
 
@@ -79,9 +95,30 @@
 
 	<!-- Demo template -->
 	<script id='demo-template' type='text/ractive'>
-		<div decorator="minmaxwidth:{min:[400,500,700],max:[300,400]}">
-		    This is a demo
-		</div>
+		<ul class="list" decorator="minmaxwidth:{min:[600,400],max:[200]}">
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		    <li>Item 6</li>
+		</ul>
+		<ul class="list list2" decorator="minmaxwidth:{min:[600,400],max:[200]}">
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		    <li>Item 6</li>
+		</ul>
+		<ul class="list list3" decorator="minmaxwidth:{min:[600,400],max:[200]}">
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		    <li>Item 6</li>
+		</ul>
 	</script>
 
 	<!-- Dependencies -->

@@ -163,15 +163,6 @@
         element.removeEventListener('resize', fn);
     }
 
-    function min_filter(element,width){
-        var w = parseInt(width); //console.log("min"+w);
-        return element.offsetWidth>=w;
-    }
-    function max_filter(element,width){
-        var w = parseInt(width); //console.log("max"+w);
-        return element.offsetWidth<w;
-    }
-
 
     Ractive.decorators.minmaxwidth = function ( node, sizes ) {
         var min = sizes.min || [],
