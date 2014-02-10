@@ -1,0 +1,12 @@
+{
+	"name": "ractive-decorators-minmaxwidth",
+	"version": "0.1.0",
+	"author": "Jens Anders Bakke",
+	"main": "Ractive-decorators-minmaxwidth.js",
+	"ignore": [
+		"**/.*",
+		"src",
+		"test",
+		"Gruntfile.js"
+	]
+}

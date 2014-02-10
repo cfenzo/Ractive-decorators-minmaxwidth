@@ -1,0 +1,14 @@
+{
+	"name": "ractive-decorators-minmaxwidth",
+	"repo": "git://github.com/cfenzo/Ractive-decorators-minmaxwidth",
+	"description": "Ractive-decorators-minmaxwidth",
+	"version": "0.1.0",
+	"keywords": [],
+	"dependencies": {},
+	"development": {},
+	"license": "MIT",
+	"main": "Ractive-decorators-minmaxwidth.js",
+	"scripts": [
+		"Ractive-decorators-minmaxwidth.js"
+	]
+}
