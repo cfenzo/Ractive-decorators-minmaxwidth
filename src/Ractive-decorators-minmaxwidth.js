@@ -58,13 +58,31 @@
 
 	'use strict';
 
+    // IE8 polyfill
+    if (!window.getComputedStyle) {
+        window.getComputedStyle = function(el) {
+            this.el = el;
+            this.getPropertyValue = function(prop) {
+                var re = /(\-([a-z]){1})/g;
+                if (prop == 'float') prop = 'styleFloat';
+                if (re.test(prop)) {
+                    prop = prop.replace(re, function () {
+                        return arguments[2].toUpperCase();
+                    });
+                }
+                return el.currentStyle[prop] ? el.currentStyle[prop] : null;
+            };
+            return this;
+        };
+    }
+
     function addFlowListener(element, type, fn){
         var flow = type == 'over';
         element.addEventListener('OverflowEvent' in window ? 'overflowchanged' : type + 'flow', function(e){
             if (e.type == (type + 'flow') ||
-                ((e.orient == 0 && e.horizontalOverflow == flow) ||
-                    (e.orient == 1 && e.verticalOverflow == flow) ||
-                    (e.orient == 2 && e.horizontalOverflow == flow && e.verticalOverflow == flow))) {
+                ((e.orient === 0 && e.horizontalOverflow === flow) ||
+                    (e.orient === 1 && e.verticalOverflow === flow) ||
+                    (e.orient === 2 && e.horizontalOverflow === flow && e.verticalOverflow === flow))) {
                 e.flow = type;
                 return fn.call(this, e);
             }
@@ -108,7 +126,7 @@
                     if (change && event.currentTarget != element) fireEvent(element, 'resize');
                 };
 
-            if (getComputedStyle(element).position == 'static'){
+            if (window.getComputedStyle(element).position == 'static'){
                 element.style.position = 'relative';
                 element._resizeSensor._resetPosition = true;
             }
@@ -120,7 +138,7 @@
             matchFlow({});
         }
         var events = element._flowEvents || (element._flowEvents = []);
-        if (events.indexOf(fn) == -1) events.push(fn);
+        if (events.indexOf(fn) === -1) events.push(fn);
         if (!resize) element.addEventListener('resize', fn, false);
         element.onresize = function(e){
             events.forEach(function(fn){
@@ -170,7 +188,7 @@
         }
 
         // add pretty events
-        if(!node._flowEvents || node._flowEvents.length==0) {
+        if(!node._flowEvents || node._flowEvents.length===0) {
             addResizeListener(node, function() { /*console.log("onresize");*/ fireEvent(this, "DOMAttrModified"); });
         }
         node.addEventListener("DOMAttrModified",on_modified);
