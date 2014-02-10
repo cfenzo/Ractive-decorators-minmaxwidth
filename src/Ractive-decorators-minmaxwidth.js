@@ -163,33 +163,25 @@
         element.removeEventListener('resize', fn);
     }
 
-    function min_filter(element,width){
-        var w = parseInt(width); //console.log("min"+w);
-        return element.offsetWidth>=w;
-    }
-    function max_filter(element,width){
-        var w = parseInt(width); //console.log("max"+w);
-        return element.offsetWidth<w;
-    }
-
 
     Ractive.decorators.minmaxwidth = function ( node, sizes ) {
-        var data = node.dataset,
-            min = sizes.min || [],
+        var min = sizes.min || [],
             max = sizes.max || [];
 
         function on_modified(){
-            min.forEach(function(width){
-                data['min-width-'+width] = min_filter(node,width);
-            });
-            max.forEach(function(width){
-                data['max-width-'+width] = max_filter(node,width);
-            });
+            var minWidths = min.filter(function(width){
+                    return node.offsetWidth>=parseInt(width);
+                }),
+                maxWidths = max.filter(function(width){
+                    return node.offsetWidth<parseInt(width);
+                });
+            node.setAttribute('data-min-width',minWidths.join(' '));
+            node.setAttribute('data-max-width',maxWidths.join(' '));
         }
 
         // add pretty events
         if(!node._flowEvents || node._flowEvents.length===0) {
-            addResizeListener(node, function() { /*console.log("onresize");*/ fireEvent(this, "DOMAttrModified"); });
+            addResizeListener(node, function() { fireEvent(this, "DOMAttrModified"); });
         }
         node.addEventListener("DOMAttrModified",on_modified);
         on_modified(); // run on initialization
