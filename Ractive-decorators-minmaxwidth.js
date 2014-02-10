@@ -58,7 +58,7 @@
 
 	'use strict';
 
-    // IE8 polyfill
+    // IE8 polyfills
     if (!window.getComputedStyle) {
         window.getComputedStyle = function(el) {
             this.el = el;
@@ -73,6 +73,15 @@
                 return el.currentStyle[prop] ? el.currentStyle[prop] : null;
             };
             return this;
+        };
+    }
+    if(!Array.isArray) {
+        Array.isArray = function (vArg) {
+            var isArray;
+
+            isArray = vArg instanceof Array;
+
+            return isArray;
         };
     }
 
@@ -167,6 +176,9 @@
     Ractive.decorators.minmaxwidth = function ( node, sizes ) {
         var min = sizes.min || [],
             max = sizes.max || [];
+
+        if(!Array.isArray(min)) min = [min];
+        if(!Array.isArray(max)) max = [max];
 
         function on_modified(){
             var minWidths = min.filter(function(width){

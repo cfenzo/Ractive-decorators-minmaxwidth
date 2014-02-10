@@ -18,7 +18,71 @@
             margin: 0 auto;
         }
 
-        /* this part must be included for the sensor to work properly */
+        /* some basic styles for this demo */
+        #demo *, *:before, *:after {
+            -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+        }
+        .list {
+            list-style: none;
+            margin:0 0 .5em 0;
+            padding:0;
+            overflow: hidden;
+        }
+
+        .list2,
+        .list3 {
+            width:60%;
+            float:left;
+        }
+        .list3 {
+            width:40%;
+        }
+
+
+        /* usage */
+        .container[data-max-width~="500"] ul{
+            float:none;
+            width:100%;
+        }
+
+        .list[data-min-width~="400"]{
+            background:#efefef;
+            padding:5px; /* we can set padding here because of box-sizing: border-box, without it could get pretty ugly */
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        }
+        .list[data-min-width~="400"] li {
+            float:left;
+            text-align: center;
+            width:50%;
+        }
+        .list[data-min-width~="400"] span {
+            display: block;
+            height:190px;
+            margin:10px;
+            background:#fff;
+            line-height: 190px;
+            box-shadow:0 1px 4px rgba(0,0,0,0.3);
+        }
+        .list[data-min-width~="600"] li {
+            width:33.33%;
+        }
+
+        .list[data-max-width~="400"] {
+            padding:10px;  /* we can set padding here because of box-sizing: border-box, without it could get pretty ugly */
+        }
+        .list[data-max-width~="400"] li{
+            border-bottom:1px solid #efefef;
+            padding:3px 6px;
+        }
+        .list[data-max-width~="400"][data-min-width~="300"] li{
+            float:left;
+            width:50%;
+        }
+
+
+
+        /* IMPORTANT!!!!!!!
+        this rule must be included for the sensor to work properly */
         .resize-sensor, .resize-sensor > div {
             position: absolute;
             top: 0;
@@ -28,41 +92,7 @@
             overflow: hidden;
             z-index: -1;
         }
-
-        .list {
-            list-style: none;
-            margin:0;
-            padding:0;
-            background:#efefef;
-            overflow: hidden;
-        }
-
-        .list2,
-        .list3 {
-            width:75%;
-            float:left;
-        }
-        .list3 {
-            width:25%;
-        }
-
-
-        /* usage */
-        [data-min-width~="400"] li {
-            float:left;
-            text-align: center;
-            background:#f7f7f7;
-            width:50%;
-            height:200px;
-            line-height: 200px;
-        }
-        .list[data-min-width~="600"] li {
-            width:33.33%;
-        }
-
-        .list[data-max-width~="200"] li{
-            color:red;
-        }
+        /* / IMPORTANT */
 	</style>
 </head>
 
@@ -79,8 +109,13 @@
 	</header>
 
 	<main>
-		<p>This decorator enables element-based media-queries for min-/max-width.<br>PS. It only supports px values</p>
-        <p>Resize the window to see the color of the text change.</p>
+		<p>This decorator enables media-queries for min-/max-width on elements.<br>Resize the window to see the lists change layout.</p>
+        <p>A few notes:</p>
+        <ul>
+            <li>It only works with px values</li>
+            <li>Avoid adding styles that change the width of the element itself using these selectors, as it can give seriously wonky results.<br><em>Although it's probably safe to use padding and border if you are using box-sizing: border-box; like in the examples below</em></li>
+            <li><strong>The last rule in the css of this demo MUST be included for the size-change detection to work properly</strong></li>
+        </ul>
 
 		<div id='demo' class='clearfix'></div>
 
@@ -95,30 +130,26 @@
 
 	<!-- Demo template -->
 	<script id='demo-template' type='text/ractive'>
-		<ul class="list" decorator="minmaxwidth:{min:[600,400],max:[200]}">
-		    <li>Item 1</li>
-		    <li>Item 2</li>
-		    <li>Item 3</li>
-		    <li>Item 4</li>
-		    <li>Item 5</li>
-		    <li>Item 6</li>
-		</ul>
-		<ul class="list list2" decorator="minmaxwidth:{min:[600,400],max:[200]}">
-		    <li>Item 1</li>
-		    <li>Item 2</li>
-		    <li>Item 3</li>
-		    <li>Item 4</li>
-		    <li>Item 5</li>
-		    <li>Item 6</li>
-		</ul>
-		<ul class="list list3" decorator="minmaxwidth:{min:[600,400],max:[200]}">
-		    <li>Item 1</li>
-		    <li>Item 2</li>
-		    <li>Item 3</li>
-		    <li>Item 4</li>
-		    <li>Item 5</li>
-		    <li>Item 6</li>
-		</ul>
+    <div class="container" decorator="minmaxwidth:{max:500}">
+        <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:[400]}">
+            {{>items}}
+        </ul>
+        <ul class="list list2" decorator="minmaxwidth:{min:[300,600,400],max:[400]}">
+            {{>items}}
+        </ul>
+        <ul class="list list3" decorator="minmaxwidth:{min:[300,600,400],max:[400]}">
+            {{>items}}
+        </ul>
+
+        <!-- {{>items}} -->
+            <li><span>Item 1</span></li>
+            <li><span>Item 2</span></li>
+            <li><span>Item 3</span></li>
+            <li><span>Item 4</span></li>
+            <li><span>Item 5</span></li>
+            <li><span>Item 6</span></li>
+        <!--{{/items}} -->
+    </div>
 	</script>
 
 	<!-- Dependencies -->
