@@ -1,4 +1,4 @@
-Ractive.js minmaxwidth decorator plugin
+Ractive.js minmaxwidth decorator
 =======================================
 
 *Find more Ractive.js plugins at [ractivejs.org/plugins](http://ractivejs.org/plugins)*
@@ -22,12 +22,39 @@ Or, if you're using a module loader, require this module:
 require( 'Ractive-decorators-minmaxwidth' );
 ```
 
-**plugin-specific instructions to go here...**
+Add the decorator in your template with one or more of these options:
+
+* min - an array of numbers or a single number
+* max - an array of numbers or a single number
+* key - the keypath to use for setting the current with as a data variable in the Ractive instance
+
+```html
+<div class="item" decorator="minmaxwidth:{min:[100,200],max:200,key:'my_width'}">
+    {{my_width}}
+</div>
+```
+
+The decorator will add data-attributes for every matched min/max value, and set the given keypath to the current width (not just if it matches one of the min/max values):
+
+```html
+<div class="item" data-min-width="100 200" data-max-width="200">200</div>
+```
+
+Which you then use in your CSS with the ~= attribute-selector:
+```css
+.item[data-min-width~="100"] {
+  ...
+}
+```
+
+NOTE! it's adviced to use a classname with the attribute-selector, so your CSS rules don't match more elements than it should.
 
 
 
 License
 -------
+
+Based on [this hitch plugin from François REMY (FremyCompany)](https://github.com/FremyCompany/prollyfill-min-width/)
 
 Copyright (c) 2014 Jens Anders Bakke. Licensed MIT
 
