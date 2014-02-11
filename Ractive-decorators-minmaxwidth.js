@@ -202,7 +202,7 @@
         }
 
         // add pretty events
-        addResizeListener(node, function() { on_modified(); },minmaxwidth.sensorClass);
+        addResizeListener(node, on_modified, minmaxwidth.sensorClass);
         on_modified(); // run on initialization
 
         return {
