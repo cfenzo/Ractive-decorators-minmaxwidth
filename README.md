@@ -24,9 +24,9 @@ require( 'Ractive-decorators-minmaxwidth' );
 
 Add the decorator in your template with one or more of these options:
 
-* min - an array of numbers or a single number
-* max - an array of numbers or a single number
-* key - the keypath to use for setting the current with as a data variable in the Ractive instance
+* min - an array of numbers or a single number (optional)
+* max - an array of numbers or a single number (optional)
+* key - the keypath to use for setting the current width on the Ractive instance (optional)
 
 ```html
 <div class="item" decorator="minmaxwidth:{min:[100,200],max:200,key:'my_width'}">
