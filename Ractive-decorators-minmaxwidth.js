@@ -85,16 +85,13 @@
         }, false);
     }
 
-    function fireEvent(element, type, data, options){
-        var options = options || {};
+    function fireEvent(element, type){
         if( document.createEvent ) {
             var event = document.createEvent('Event');
-            event.initEvent(type, 'bubbles' in options ? options.bubbles : true, 'cancelable' in options ? options.cancelable : true);
-            for (var z in data) event[z] = data[z];
+            event.initEvent(type);
             element.dispatchEvent(event);
         }else if( document.createEventObject ) {
             var evObj = document.createEventObject();
-            for (var z in data) evObj[z] = data[z];
             element.fireEvent( 'on' + type, evObj );
         }
     }
