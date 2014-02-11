@@ -93,29 +93,33 @@
         element.dispatchEvent(event);
     }
 
+    function addSensorStyles(sensorClass){
+        if(!styles_added[sensorClass]){
+            var style = '.'+sensorClass+', .'+sensorClass+' > div {position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow: hidden;z-index: -1;}';
+            if(!stylesheet){
+                stylesheet = document.createElement('style');
+                stylesheet.type = 'text/css';
+                stylesheet.id = 'ractive_decorator_minmaxwidth_styles';
+                document.getElementsByTagName("head")[0].appendChild(stylesheet);
+            }
+
+            if (stylesheet.styleSheet) {
+                stylesheet.styleSheet.cssText = style;
+            }else {
+                stylesheet.appendChild(document.createTextNode(style));
+            }
+            styles_added[sensorClass] = true;
+        }
+    }
+
     function addResizeListener(element, fn, sensorClass){
         var resize = 'onresize' in element;
         if (!resize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
             sensor.className = sensorClass || 'resize-sensor';
             sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
+            addSensorStyles(sensorClass);
 
-            if(!styles_added[sensorClass]){
-                var style = '.'+sensorClass+', .'+sensorClass+' > div {position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow: hidden;z-index: -1;}';
-                if(!stylesheet){
-                    stylesheet = document.createElement('style');
-                    stylesheet.type = 'text/css';
-                    stylesheet.id = 'ractive_decorator_minmaxwidth_styles';
-                    document.getElementsByTagName("head")[0].appendChild(stylesheet);
-                }
-
-                if (stylesheet.styleSheet) {
-                    stylesheet.styleSheet.cssText = style;
-                }else {
-                    stylesheet.appendChild(document.createTextNode(style));
-                }
-                styles_added[sensorClass] = true;
-            }
             var x = 0, y = 0,
                 first = sensor.firstElementChild.firstChild,
                 last = sensor.lastElementChild.firstChild,
