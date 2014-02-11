@@ -131,7 +131,7 @@
 
 	<!-- Demo template -->
 	<script id='demo-template' type='text/ractive'>
-    <div class="container" decorator="minmaxwidth:{max:500}">
+    <div class="container" decorator="minmaxwidth:{max:500,key:'width'}">
         <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">
             {{>items}}
         </ul>

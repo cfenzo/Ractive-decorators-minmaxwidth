@@ -173,9 +173,11 @@
     }
 
 
-    Ractive.decorators.minmaxwidth = function ( node, sizes ) {
-        var min = sizes.min || [],
-            max = sizes.max || [];
+    Ractive.decorators.minmaxwidth = function ( node, options ) {
+        var min = options.min || [],
+            max = options.max || [],
+            key = options.key || false,
+            R = node._ractive.root;
 
         if(!Array.isArray(min)) min = [min];
         if(!Array.isArray(max)) max = [max];
@@ -189,6 +191,7 @@
                 });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
+            if(key) R.set(key,node.offsetWidth);
         }
 
         // add pretty events
