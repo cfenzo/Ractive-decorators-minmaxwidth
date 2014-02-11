@@ -29,18 +29,20 @@
             overflow: hidden;
         }
 
-        .list2,
-        .list3 {
-            width:60%;
+        article {
             float:left;
+            width:60%;
         }
-        .list3 {
-            width:40%;
+        aside {
+            float: right;
+            width: 40%;
         }
+
 
 
         /* usage */
-        .container[data-max-width~="500"] ul{
+        .container[data-max-width~="500"] article,
+        .container[data-max-width~="500"] aside {
             float:none;
             width:100%;
         }
@@ -63,6 +65,7 @@
             line-height: 190px;
             box-shadow:0 1px 4px rgba(0,0,0,0.3);
         }
+
         .list[data-min-width~="600"] li {
             width:33.33%;
         }
@@ -74,6 +77,7 @@
             border-bottom:1px solid #efefef;
             padding:3px 6px;
         }
+
         .list[data-max-width~="400"][data-min-width~="300"] li{
             float:left;
             width:50%;
@@ -94,12 +98,11 @@
 	</header>
 
 	<main>
-		<p>This decorator enables media-queries for min-/max-width on elements.<br>Resize the window to see the lists change layout.</p>
+		<p>This decorator enables a sort of media-queries for min-/max-width on elements.<br>Resize the window to see the lists change layout.</p>
         <p>A few notes:</p>
         <ul>
             <li>It only works with px values</li>
             <li>Avoid adding styles that change the width of the element itself using these selectors, as it can give seriously wonky results.<br><em>Although it's probably safe to use padding and border if you are using box-sizing: border-box; like in the examples below</em></li>
-            <li><strong>The last rule in the css of this demo MUST be included for the size-change detection to work properly</strong></li>
         </ul>
 
 		<div id='demo' class='clearfix'></div>
@@ -116,24 +119,26 @@
 
 	<!-- Demo template -->
 	<script id='demo-template' type='text/ractive'>
-    <div class="container" decorator="minmaxwidth:{max:500,key:'width'}">
-        <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">
+    <section class="container" decorator="minmaxwidth:{max:500,key:'width'}">
+        <h2>{{width}}px wide</h2>
+        {{>items}}
+        <article>
             {{>items}}
-        </ul>
-        <ul class="list list2" decorator="minmaxwidth:{min:[300,600,400],max:400}">
+        </article>
+        <aside>
             {{>items}}
-        </ul>
-        <ul class="list list3" decorator="minmaxwidth:{min:[300,600,400],max:400}">
-            {{>items}}
-        </ul>
-    </div>
+        </aside>
+    </section>
+
     <!-- {{>items}} -->
-        <li><span>Item 1</span></li>
-        <li><span>Item 2</span></li>
-        <li><span>Item 3</span></li>
-        <li><span>Item 4</span></li>
-        <li><span>Item 5</span></li>
-        <li><span>Item 6</span></li>
+        <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">
+            <li><span>Item 1</span></li>
+            <li><span>Item 2</span></li>
+            <li><span>Item 3</span></li>
+            <li><span>Item 4</span></li>
+            <li><span>Item 5</span></li>
+            <li><span>Item 6</span></li>
+        </ul>
     <!--{{/items}} -->
 	</script>
 

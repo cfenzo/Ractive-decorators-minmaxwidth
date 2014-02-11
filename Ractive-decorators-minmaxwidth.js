@@ -58,23 +58,10 @@
 
 	'use strict';
 
+    var styles_added = [],
+        stylesheet;
+
     // IE8 polyfills
-    if (!window.getComputedStyle) {
-        window.getComputedStyle = function(el) {
-            this.el = el;
-            this.getPropertyValue = function(prop) {
-                var re = /(\-([a-z]){1})/g;
-                if (prop == 'float') prop = 'styleFloat';
-                if (re.test(prop)) {
-                    prop = prop.replace(re, function () {
-                        return arguments[2].toUpperCase();
-                    });
-                }
-                return el.currentStyle[prop] ? el.currentStyle[prop] : null;
-            };
-            return this;
-        };
-    }
     if(!Array.isArray) {
         Array.isArray = function (vArg) {
             var isArray;
@@ -106,12 +93,32 @@
         element.dispatchEvent(event);
     }
 
-    function addResizeListener(element, fn){
+    function addSensorStyles(sensorClass){
+        if(!styles_added[sensorClass]){
+            var style = '.'+sensorClass+', .'+sensorClass+' > div {position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow: hidden;z-index: -1;}';
+            if(!stylesheet){
+                stylesheet = document.createElement('style');
+                stylesheet.type = 'text/css';
+                stylesheet.id = 'ractive_decorator_minmaxwidth_styles';
+                document.getElementsByTagName("head")[0].appendChild(stylesheet);
+            }
+
+            if (stylesheet.styleSheet) {
+                stylesheet.styleSheet.cssText = style;
+            }else {
+                stylesheet.appendChild(document.createTextNode(style));
+            }
+            styles_added[sensorClass] = true;
+        }
+    }
+
+    function addResizeListener(element, fn, sensorClass){
         var resize = 'onresize' in element;
         if (!resize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
-            sensor.className = 'resize-sensor';
-            sensor.innerHTML = '<div class="resize-overflow"><div></div></div><div class="resize-underflow"><div></div></div>';
+            sensor.className = sensorClass || 'resize-sensor';
+            sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
+            addSensorStyles(sensorClass);
 
             var x = 0, y = 0,
                 first = sensor.firstElementChild.firstChild,
@@ -172,10 +179,11 @@
         element.removeEventListener('resize', fn);
     }
 
-
-    Ractive.decorators.minmaxwidth = function ( node, sizes ) {
-        var min = sizes.min || [],
-            max = sizes.max || [];
+    var minmaxwidth = function ( node, options ) {
+        var min = options.min || [],
+            max = options.max || [],
+            key = options.key || false,
+            R = node._ractive.root;
 
         if(!Array.isArray(min)) min = [min];
         if(!Array.isArray(max)) max = [max];
@@ -189,11 +197,12 @@
                 });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
+            if(key) R.set(key,node.offsetWidth);
         }
 
         // add pretty events
         if(!node._flowEvents || node._flowEvents.length===0) {
-            addResizeListener(node, function() { fireEvent(this, "DOMAttrModified"); });
+            addResizeListener(node, function() { fireEvent(this, "DOMAttrModified"); },minmaxwidth.sensorClass);
         }
         node.addEventListener("DOMAttrModified",on_modified);
         on_modified(); // run on initialization
@@ -207,4 +216,8 @@
         };
     };
 
+    // defaults
+    minmaxwidth.sensorClass = 'resize-sensor';
+
+    Ractive.decorators.minmaxwidth = minmaxwidth;
 }));
