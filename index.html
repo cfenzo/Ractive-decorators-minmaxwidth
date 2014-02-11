@@ -113,18 +113,16 @@
 	<header>
 		<h1>Ractive.js minmaxwidth decorator</h1>
 		<p class='strap'>
-			<span class='download'>download: <a href='[TODO]'>Ractive-decorators-minmaxwidth.js</a></span>
+			<span class='download'>download: <a href='https://raw2.github.com/cfenzo/Ractive-decorators-minmaxwidth/master/Ractive-decorators-minmaxwidth.js'>Ractive-decorators-minmaxwidth.js</a></span>
 			<span class='more-plugins'>more plugins at <a href='http://ractivejs.org/plugins'>ractivejs.org/plugins</a></span>
 		</p>
 	</header>
 
 	<main>
-		<p>This decorator enables a sort of media-queries for min-/max-width on elements.<br>Resize the window to see the lists change layout.</p>
-        <p>A few notes:</p>
-        <ul>
-            <li>It only works with px values</li>
-            <li>Avoid adding styles that change the width of the element itself using these selectors, as it can give seriously wonky results.<br><em>Although it's probably safe to use padding and border if you are using box-sizing: border-box; like in the examples below</em></li>
-        </ul>
+		<p>This decorator provides <em>Element Media Queries</em> by setting data-attributes based on the min/max widths in the decorator options.<br>
+        It can also set the current width as a variable on the Ractive instance (by keypath)</p>
+        <p><a href="https://github.com/cfenzo/Ractive-decorators-minmaxwidth">See the GitHub repo for usage info</a></p>
+        <p>Resize the window to see the lists change layout.</p>
 
 		<div id='demo' class='clearfix'></div>
 
