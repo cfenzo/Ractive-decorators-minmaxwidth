@@ -198,6 +198,7 @@
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
             if(key) R.set(key,node.offsetWidth);
+            node.className = node.className; // ugly IE8 hack to reset styles
         }
 
         // add pretty events
