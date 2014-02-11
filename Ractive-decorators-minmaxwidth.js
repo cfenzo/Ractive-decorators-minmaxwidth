@@ -75,6 +75,7 @@
         //<body> and <frameset> Events
         onload:1,
         onunload:1,
+        onresize:1,
         //Form Events
         onblur:1,
         onchange:1,
