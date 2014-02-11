@@ -95,7 +95,7 @@
         }else if( document.createEventObject ) {
             var evObj = document.createEventObject();
             for (var z in data) evObj[z] = data[z];
-            element.fireEvent( 'on' + evt, evObj );
+            element.fireEvent( 'on' + type, evObj );
         }
     }
 
