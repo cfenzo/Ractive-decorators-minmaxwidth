@@ -84,30 +84,13 @@
             }
         }, false);
     }
-/*
-    function fireEvent(element, type){
-        if( document.createEvent ) {
-            var event = document.createEvent('Event');
-            event.initEvent(type);
-            element.dispatchEvent(event);
-        }else if( document.createEventObject ) {
-            var evObj = document.createEventObject();
-            element.fireEvent( 'on' + type, evObj );
-        }
-    }
-*/
-    function fireEvent(obj,evt){
 
-        var fireOnThis = obj;
-        if( document.createEvent ) {
-            var evObj = document.createEvent('MouseEvents');
-            evObj.initEvent( evt, true, false );
-            fireOnThis.dispatchEvent( evObj );
-
-        } else if( document.createEventObject ) {
-            var evObj = document.createEventObject();
-            fireOnThis.fireEvent( 'on' + evt, evObj );
-        }
+    function fireEvent(element, type, data, options){
+        var options = options || {},
+            event = document.createEvent('Event');
+        event.initEvent(type, 'bubbles' in options ? options.bubbles : true, 'cancelable' in options ? options.cancelable : true);
+        for (var z in data) event[z] = data[z];
+        element.dispatchEvent(event);
     }
 
     function addSensorStyles(sensorClass){
@@ -219,16 +202,14 @@
 
         // add pretty events
         if(!node._flowEvents || node._flowEvents.length===0) {
-            addResizeListener(node, function() { fireEvent(this, "DOMAttrModified"); },minmaxwidth.sensorClass);
+            addResizeListener(node, function() { on_modified.call(this); },minmaxwidth.sensorClass);
         }
-        node.addEventListener("DOMAttrModified",on_modified);
         on_modified(); // run on initialization
 
         return {
             teardown: function () {
                 // remove event listeners
                 removeResizeListener(node);
-                node.removeEventListener('DOMAttrModified',on_modified);
             }
         };
     };
