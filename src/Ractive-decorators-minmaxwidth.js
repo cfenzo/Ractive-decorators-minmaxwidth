@@ -111,7 +111,7 @@
         if (!resize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
             sensor.className = 'resize-sensor';
-            sensor.innerHTML = '<div class="resize-overflow"><div></div></div><div class="resize-underflow"><div></div></div>';
+            sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
 
             var x = 0, y = 0,
                 first = sensor.firstElementChild.firstChild,
