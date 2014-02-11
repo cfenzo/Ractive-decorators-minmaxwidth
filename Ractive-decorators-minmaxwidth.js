@@ -266,7 +266,7 @@
 
         // add pretty events
         if(!node._flowEvents || node._flowEvents.length===0) {
-            addResizeListener(node, function() { triggerEvent(this, "DOMAttrModified"); },minmaxwidth.sensorClass);
+            addResizeListener(node, function() { triggerEvent(node, "DOMAttrModified"); },minmaxwidth.sensorClass);
         }
 
         addEvent(node,"DOMAttrModified",on_modified);
