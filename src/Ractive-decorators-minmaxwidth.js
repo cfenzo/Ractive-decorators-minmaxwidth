@@ -84,7 +84,7 @@
             }
         }, false);
     }
-
+/*
     function fireEvent(element, type){
         if( document.createEvent ) {
             var event = document.createEvent('Event');
@@ -93,6 +93,20 @@
         }else if( document.createEventObject ) {
             var evObj = document.createEventObject();
             element.fireEvent( 'on' + type, evObj );
+        }
+    }
+*/
+    function fireEvent(obj,evt){
+
+        var fireOnThis = obj;
+        if( document.createEvent ) {
+            var evObj = document.createEvent('MouseEvents');
+            evObj.initEvent( evt, true, false );
+            fireOnThis.dispatchEvent( evObj );
+
+        } else if( document.createEventObject ) {
+            var evObj = document.createEventObject();
+            fireOnThis.fireEvent( 'on' + evt, evObj );
         }
     }
 
