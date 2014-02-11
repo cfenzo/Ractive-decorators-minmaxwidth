@@ -71,75 +71,10 @@
             return isArray;
         };
     }
-    var htmlEvents = {// list of real events
-        //<body> and <frameset> Events
-        onload:1,
-        onunload:1,
-        onresize:1,
-        //Form Events
-        onblur:1,
-        onchange:1,
-        onfocus:1,
-        onreset:1,
-        onselect:1,
-        onsubmit:1,
-        //Image Events
-        onabort:1,
-        //Keyboard Events
-        onkeydown:1,
-        onkeypress:1,
-        onkeyup:1,
-        //Mouse Events
-        onclick:1,
-        ondblclick:1,
-        onmousedown:1,
-        onmousemove:1,
-        onmouseout:1,
-        onmouseover:1,
-        onmouseup:1
-    }
-    function triggerEvent(el,eventName){
-        var event;
-        if(document.createEvent){
-            event = document.createEvent('HTMLEvents');
-            event.initEvent(eventName,true,true);
-        }else if(document.createEventObject){// IE < 9
-            event = document.createEventObject();
-            event.eventType = eventName;
-        }
-        event.eventName = eventName;
-        if(el.dispatchEvent){
-            el.dispatchEvent(event);
-        }else if(el.fireEvent && htmlEvents['on'+eventName]){// IE < 9
-            el.fireEvent('on'+event.eventType,event);// can trigger only real event (e.g. 'click')
-        }else if(el[eventName]){
-            el[eventName]();
-        }else if(el['on'+eventName]){
-            el['on'+eventName]();
-        }
-    }
-    function addEvent(el,type,handler){
-        if(el.addEventListener){
-            el.addEventListener(type,handler,false);
-        }else if(el.attachEvent && htmlEvents['on'+type]){// IE < 9
-            el.attachEvent('on'+type,handler);
-        }else{
-            el['on'+type]=handler;
-        }
-    }
-    function removeEvent(el,type,handler){
-        if(el.removeventListener){
-            el.removeEventListener(type,handler,false);
-        }else if(el.detachEvent && htmlEvents['on'+type]){// IE < 9
-            el.detachEvent('on'+type,handler);
-        }else{
-            el['on'+type]=null;
-        }
-    }
 
     function addFlowListener(element, type, fn){
         var flow = type == 'over';
-        addEvent(element,'OverflowEvent' in window ? 'overflowchanged' : type + 'flow', function(e){
+        element.addEventListener('OverflowEvent' in window ? 'overflowchanged' : type + 'flow', function(e){
             if (e.type == (type + 'flow') ||
                 ((e.orient === 0 && e.horizontalOverflow === flow) ||
                     (e.orient === 1 && e.verticalOverflow === flow) ||
@@ -204,7 +139,7 @@
                         change = true;
                         y = height;
                     }
-                    if (change && event.currentTarget != element) triggerEvent(element, 'resize');
+                    if (change && event.currentTarget != element) fireEvent(element, 'resize');
                 };
 
             if (window.getComputedStyle(element).position == 'static'){
@@ -220,7 +155,7 @@
         }
         var events = element._flowEvents || (element._flowEvents = []);
         if (events.indexOf(fn) === -1) events.push(fn);
-        if (!resize) addEvent(element,'resize', fn);
+        if (!resize) element.addEventListener('resize', fn);
         element.onresize = function(e){
             events.forEach(function(fn){
                 fn.call(element, e);
@@ -241,7 +176,7 @@
             if ('onresize' in element) element.onresize = null;
             delete element._flowEvents;
         }
-        removeEvent(element,'resize', fn);
+        element.removeEventListener('resize', fn);
     }
 
     var minmaxwidth = function ( node, options ) {
@@ -266,19 +201,13 @@
         }
 
         // add pretty events
-        if(!node._flowEvents || node._flowEvents.length===0) {
-            addResizeListener(node, function() { triggerEvent(node, "DOMAttrModified"); },minmaxwidth.sensorClass);
-        }
-
-        addEvent(node,"DOMAttrModified",on_modified);
-
+        addResizeListener(node, function() { on_modified(); },minmaxwidth.sensorClass);
         on_modified(); // run on initialization
 
         return {
             teardown: function () {
                 // remove event listeners
                 removeResizeListener(node);
-                removeEvent(node,'DOMAttrModified',on_modified);
             }
         };
     };
