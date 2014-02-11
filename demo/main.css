@@ -121,6 +121,9 @@ pre.lang-html:before {
 pre.lang-js:before {
 	content: 'code';
 }
+pre.lang-css:before {
+    content: 'CSS';
+}
 
 .prettyprinted {
 	color: #444;

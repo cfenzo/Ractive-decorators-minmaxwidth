@@ -9,7 +9,7 @@
 	<link rel='stylesheet' href='demo/main.css'>
 
 	<style type='text/css'>
-
+        /* some basic styles for this demo */
         body {
             max-width: 1000px;
         }
@@ -18,7 +18,6 @@
             margin: 0 auto;
         }
 
-        /* some basic styles for this demo */
         #demo *, *:before, *:after {
             -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
         }
@@ -40,16 +39,26 @@
 
 
 
-        /* usage */
-        .container[data-max-width~="500"] article,
-        .container[data-max-width~="500"] aside {
-            float:none;
-            width:100%;
-        }
+/* ============= usage =============
 
+    Only the min/max values added in the template is available in the CSS
+    In this example, the following values are possible:
+
+    for .list:
+        min-width: 400,600
+        max-width: 400
+
+    for .container:
+        max-width: 500
+
+
+    PS. An element could match multiple values, thus combining the selectors (like real media queries)
+*/
+
+        /* when the list is wider than 400px. */
         .list[data-min-width~="400"]{
             background:#efefef;
-            padding:5px; /* we can set padding here because of box-sizing: border-box, without it could get pretty ugly */
+            padding:5px; /* we can set padding here because of box-sizing: border-box. */
             box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
         }
         .list[data-min-width~="400"] li {
@@ -66,21 +75,33 @@
             box-shadow:0 1px 4px rgba(0,0,0,0.3);
         }
 
+        /* when the list is wider than 600px  */
         .list[data-min-width~="600"] li {
             width:33.33%;
         }
 
+
+        /* when the width is 400px or less */
         .list[data-max-width~="400"] {
-            padding:10px;  /* we can set padding here because of box-sizing: border-box, without it could get pretty ugly */
+            padding:10px;  /* we can set padding here because of box-sizing: border-box. */
         }
         .list[data-max-width~="400"] li{
             border-bottom:1px solid #efefef;
             padding:3px 6px;
         }
 
+        /* when the width is 400px or less, AND wider than 300px */
         .list[data-max-width~="400"][data-min-width~="300"] li{
             float:left;
             width:50%;
+        }
+
+
+        /* on small widths, article and aside should flo below each other */
+        .container[data-max-width~="500"] article,
+        .container[data-max-width~="500"] aside {
+            float:none;
+            width:auto;
         }
 	</style>
 </head>
@@ -109,6 +130,72 @@
 
 		<pre id='demo-template-view' class='prettyprint lang-html'></pre>
 		<pre id='demo-code-view' class='prettyprint lang-js'></pre>
+        <pre id='demo-css-view' class='prettyprint lang-css'>
+/* ============= usage =============
+
+    Only the min/max values added in the template is available in the CSS
+    In this example, the following values are possible:
+
+    for .list:
+        min-width: 400,600
+        max-width: 400
+
+    for .container:
+        max-width: 500
+
+
+    PS. An element could match multiple values, thus combining the selectors (like real media queries)
+*/
+
+        /* when the list is wider than 400px. */
+        .list[data-min-width~="400"]{
+            background:#efefef;
+            padding:5px; /* we can set padding here because of box-sizing: border-box. */
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        }
+        .list[data-min-width~="400"] li {
+            float:left;
+            text-align: center;
+            width:50%;
+        }
+        .list[data-min-width~="400"] span {
+            display: block;
+            height:190px;
+            margin:10px;
+            background:#fff;
+            line-height: 190px;
+            box-shadow:0 1px 4px rgba(0,0,0,0.3);
+        }
+
+        /* when the list is wider than 600px  */
+        .list[data-min-width~="600"] li {
+            width:33.33%;
+        }
+
+
+        /* when the width is 400px or less */
+        .list[data-max-width~="400"] {
+            padding:10px;  /* we can set padding here because of box-sizing: border-box */
+        }
+        .list[data-max-width~="400"] li{
+            border-bottom:1px solid #efefef;
+            padding:3px 6px;
+        }
+
+        /* when the width is 400px or less, AND wider than 300px */
+        .list[data-max-width~="400"][data-min-width~="300"] li{
+            float:left;
+            width:50%;
+        }
+
+
+        /* on small widths, article and aside should flo below each other */
+        .container[data-max-width~="500"] article,
+        .container[data-max-width~="500"] aside {
+            float:none;
+            width:auto;
+        }
+        </pre>
 	</main>
 
 	<!-- add additional info such as your homepage here, if you want -->
