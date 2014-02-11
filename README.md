@@ -47,7 +47,9 @@ You then use the ~= attribute-selector to write styles targeting specific breakp
 }
 ```
 
-NOTE! it's adviced to use a classname with the attribute-selector, so your CSS rules don't match more elements than it should.
+**It's recommended to use a className with the attribute-selector, so your CSS rules don't match more elements than it should.**
+
+[See the demo with more CSS examples here.](http://cfenzo.github.io/Ractive-decorators-minmaxwidth/)
 
 
 
