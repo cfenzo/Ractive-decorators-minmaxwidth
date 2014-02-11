@@ -189,6 +189,7 @@
         if(!Array.isArray(max)) max = [max];
 
         function on_modified(){
+            if(key) R.set(key,node.offsetWidth);
             var minWidths = min.filter(function(width){
                     return node.offsetWidth>=parseInt(width);
                 }),
@@ -197,7 +198,6 @@
                 });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
-            if(key) R.set(key,node.offsetWidth);
         }
 
         // add pretty events
