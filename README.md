@@ -40,7 +40,7 @@ The decorator will add data-attributes for every matched min/max value, and set 
 <div class="item" data-min-width="100 200" data-max-width="200">200</div>
 ```
 
-Which you then use in your CSS with the ~= attribute-selector:
+You then use the ~= attribute-selector to write styles targeting specific breakpoints:
 ```css
 .item[data-min-width~="100"] {
   ...
