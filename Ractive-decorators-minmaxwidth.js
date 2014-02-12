@@ -226,9 +226,7 @@
             }
             if (supports_onresize) element.onresize = null;
             try { delete element._resizeEvents; } catch(e) { /* delete arrays not supported on IE 7 and below */}
-            if (!supports_onresize && no_flowevents) {
-                removeResizePoller(element); // only call removeResizePoller when there's no resize events left on the element
-            }
+            if (!supports_onresize && no_flowevents) removeResizePoller(element); // only call removeResizePoller when there's no resize events left on the element
         }
         if(!supports_onresize) element.removeEventListener('resize', fn);
     }
