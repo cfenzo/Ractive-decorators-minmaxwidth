@@ -157,7 +157,7 @@
     function removeResizeWatcher(element){
         var index = _watcher_elements.indexOf(element);
         if(index > -1) _watcher_elements.splice(index,1);
-        if(_watcher_elements.length < 1) _watcher_runner = null;
+        if(_watcher_elements.length < 1) window.clearInterval(_watcher_runner);
     }
 
     function addResizeListener(element, fn, sensorClass){
