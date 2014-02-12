@@ -57,7 +57,6 @@ License
 -------
 
 Based on [Back Alley Coder's "Cross-Browser, Event-based, Element Resize Detection"](http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/)
-IE11 support thanks to [Sebastian Decima's javascript-detect-element-resize (also based on Back Alley Coder's script)](https://github.com/sdecima/javascript-detect-element-resize)
 
 Copyright (c) 2014 Jens Anders Bakke. Licensed MIT
 
