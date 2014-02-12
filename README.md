@@ -24,23 +24,23 @@ require( 'Ractive-decorators-minmaxwidth' );
 
 Add the decorator in your template with one or more of these options:
 
-* `min` Array of min-widths (or single width) [optional]
-* `max` Array of max-widths (or single width) [optional]
-* `key` Keypath to use for setting the current width on the Ractive instance [optional]
+* `min` Array of min-widths (or single width) to match against [optional]
+* `max` Array of max-widths (or single width) to match against [optional]
+* `keypath` Keypath to use for setting the current width in the Ractive instance [optional]
 
 ```html
-<div class="item" decorator="minmaxwidth:{min:[100,200],max:200,key:'my_width'}">
+<div class="item" decorator="minmaxwidth:{min:[100,200],max:200,keypath:'my_width'}">
     {{my_width}}
 </div>
 ```
 
-The decorator will add data-attributes for every matched min/max value, and set the given keypath to the current width (not just if it matches one of the min/max values):
+The decorator will add `data-min-width` and `data-max-width` attributes holding a space-delimited list of matched min/max values, and set the given keypath to the current width (not just if it matches one of the min/max values):
 
 ```html
 <div class="item" data-min-width="100 200" data-max-width="200">200</div>
 ```
 
-You then use the `~=` attribute-selector to write styles targeting specific breakpoints:
+You then use the `~=` attribute-selector to write styles targeting the specific min/max values:
 ```css
 .item[data-min-width~="100"] {
   ...

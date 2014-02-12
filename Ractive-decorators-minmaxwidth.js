@@ -27,7 +27,29 @@
 	    // the return value
 	    require( 'Ractive-decorators-minmaxwidth' );
 
-	<< more specific instructions for this plugin go here... >>
+    Add the decorator in your template with one or more of these options:
+
+        * `min` Array of min-widths (or single width) to match against [optional]
+        * `max` Array of max-widths (or single width) to match against [optional]
+        * `keypath` Keypath to use for setting the current width in the Ractive instance [optional]
+
+        <div class="item" decorator="minmaxwidth:{min:[100,200],max:200,keypath:'my_width'}">
+        {{my_width}}
+        </div>
+
+    The decorator will add `data-min-width` and `data-max-width` attributes holding a space-delimited list of matched min/max values, and set the given keypath to the current width (not just if it matches one of the min/max values):
+
+        <div class="item" data-min-width="100 200" data-max-width="200">200</div>
+
+    You then use the `~=` attribute-selector to write styles targeting the specific min/max values:
+
+        .item[data-min-width~="100"] {
+        ...
+        }
+
+    It's recommended to use a className with the attribute-selector, so your CSS rules don't match more elements than it should.
+
+    See the demo with more CSS examples: http://cfenzo.github.io/Ractive-decorators-minmaxwidth/
 
 */
 
@@ -61,7 +83,7 @@
     var styles_added = [],
         stylesheet;
 
-    // IE8 polyfills
+    // IE8 polyfill
     if(!Array.isArray) {
         Array.isArray = function (vArg) {
             var isArray;
@@ -86,8 +108,9 @@
     }
 
     function fireEvent(element, type, data, options){
-        var options = options || {},
-            event = document.createEvent('Event');
+        var event;
+        options = options || {};
+        event = document.createEvent('Event');
         event.initEvent(type, 'bubbles' in options ? options.bubbles : true, 'cancelable' in options ? options.cancelable : true);
         for (var z in data) event[z] = data[z];
         element.dispatchEvent(event);
@@ -180,13 +203,7 @@
     }
 
     var minmaxwidth = function ( node, options ) {
-        var min = options.min || [],
-            max = options.max || [],
-            key = options.key || false,
-            R = node._ractive.root;
-
-        if(!Array.isArray(min)) min = [min];
-        if(!Array.isArray(max)) max = [max];
+        var min, max, keypath, R;
 
         function on_modified(){
             var minWidths = min.filter(function(width){
@@ -197,9 +214,18 @@
                 });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
-            if(key) R.set(key,node.offsetWidth);
+            if(keypath) R.set(keypath,node.offsetWidth);
             node.className = node.className; // ugly IE8 hack to reset styles
         }
+
+        options = options || {};
+        min = options.min || [];
+        max = options.max || [];
+        keypath = options.keypath || false;
+        R = node._ractive.root;
+
+        if(!Array.isArray(min)) min = [min];
+        if(!Array.isArray(max)) max = [max];
 
         // add pretty events
         addResizeListener(node, on_modified, minmaxwidth.sensorClass);
