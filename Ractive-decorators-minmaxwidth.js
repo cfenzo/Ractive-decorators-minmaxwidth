@@ -83,7 +83,7 @@
 
     var styles_added = [],
         stylesheet,
-        is_above_ie10 = (!(window.ActiveXObject) && "ActiveXObject" in window), // this is ugly, but we have to live with it..
+        use_watcher_fallback = ( (!(window.ActiveXObject) && "ActiveXObject" in window) || !('UIEvent' in window) ), // this is ugly, but we have to live with it..
         _watcher_interval = 250,
         _watcher_runner,
         _watcher_elements = [];
@@ -162,7 +162,7 @@
 
     function addResizeListener(element, fn, sensorClass){
         var supports_onresize = 'onresize' in element;
-        if(!supports_onresize && is_above_ie10){
+        if(!supports_onresize && use_watcher_fallback){
             addResizeWatcher(element);
         }else if (!supports_onresize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
@@ -217,7 +217,7 @@
         var index,
             supports_onresize = 'onresize' in element;
 
-        if (!supports_onresize && is_above_ie10) {
+        if (!supports_onresize && use_watcher_fallback) {
             removeResizeWatcher(element);
         }
         index = element._flowEvents.indexOf(fn);
