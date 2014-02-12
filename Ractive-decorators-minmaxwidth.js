@@ -83,8 +83,10 @@
 
     var styles_added = [],
         stylesheet,
-        is_above_ie10 = !(window.ActiveXObject) && "ActiveXObject" in window,
-        supports_mutation_observer = 'MutationObserver' in window;
+        is_above_ie10 = (!(window.ActiveXObject) && "ActiveXObject" in window), // this is ugly, but we have to live with it..
+        _watcher_interval = 250,
+        _watcher_runner,
+        _watcher_elements = [];
 
     // IE8 polyfill
     if(!Array.isArray) {
@@ -108,28 +110,6 @@
                 return fn.call(this, e);
             }
         }, false);
-    }
-
-    function newResizeMutationObserverCallback(element, fn) {
-        var oldWidth = element.clientWidth,
-            oldHeight = element.clientHeight;
-        return function() {
-            if(oldWidth != element.clientWidth || oldHeight != element.clientHeight) {
-                oldWidth = element.clientWidth;
-                oldHeight = element.clientHeight;
-                fn.call(element);
-            }
-        };
-    }
-
-    function addResizeMutationObserver(element, fn){
-        var observer = new window.MutationObserver(newResizeMutationObserverCallback(element, fn));
-        observer.observe(element, {
-            attributes: true,
-            subtree: true,
-            attributeFilter: ['style']
-        });
-        return observer;
     }
 
     function fireEvent(element, type, data, options){
@@ -159,90 +139,100 @@
             styles_added[sensorClass] = true;
         }
     }
+    function addResizeWatcher(element){
+        if(_watcher_elements.indexOf(element) === -1) _watcher_elements.push(element);
+        if(!_watcher_runner) _watcher_runner = window.setInterval(function(){
+            _watcher_elements.forEach(function(element){
+                var _lastSize = element._lastSize || {width:0,height:0},
+                    ow = element.offsetWidth,
+                    oh = element.offsetHeight;
+
+                if(ow !== _lastSize.width || oh !== _lastSize.height){
+                    element._lastSize = {width:ow,height:oh};
+                    fireEvent(element,'resize');
+                }
+            });
+        },_watcher_interval);
+    }
+    function removeResizeWatcher(element){
+        var index = _watcher_elements.indexOf(element);
+        if(index > -1) _watcher_elements.splice(index,1);
+        if(_watcher_elements.length < 1) _watcher_runner = null;
+    }
 
     function addResizeListener(element, fn, sensorClass){
-        var events;
-        if (is_above_ie10 && supports_mutation_observer) {
-            fn._mutationObserver = addResizeMutationObserver(element, fn);
-            events = element._mutationObservers || (element._mutationObservers = []);
-            if (events.indexOf(fn) == -1) events.push(fn);
-        } else {
-            var supports_onresize = 'onresize' in element;
-            if (!supports_onresize && !element._resizeSensor) {
-                var sensor = element._resizeSensor = document.createElement('div');
-                sensor.className = sensorClass || 'resize-sensor';
-                sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
-                addSensorStyles(sensorClass);
+        var supports_onresize = 'onresize' in element;
+        if(!supports_onresize && is_above_ie10){
+            addResizeWatcher(element);
+        }else if (!supports_onresize && !element._resizeSensor) {
+            var sensor = element._resizeSensor = document.createElement('div');
+            sensor.className = sensorClass || 'resize-sensor';
+            sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
+            addSensorStyles(sensorClass);
 
-                var x = 0, y = 0,
-                    first = sensor.firstElementChild.firstChild,
-                    last = sensor.lastElementChild.firstChild,
-                    matchFlow = function(event){
-                        var change = false,
-                            width = element.offsetWidth;
-                        if (x != width) {
-                            first.style.width = width - 1 + 'px';
-                            last.style.width = width + 1 + 'px';
-                            change = true;
-                            x = width;
-                        }
-                        var height = element.offsetHeight;
-                        if (y != height) {
-                            first.style.height = height - 1 + 'px';
-                            last.style.height = height + 1 + 'px';
-                            change = true;
-                            y = height;
-                        }
-                        if (change && event.currentTarget != element) fireEvent(element, 'resize');
-                    };
+            var x = 0, y = 0,
+                first = sensor.firstElementChild.firstChild,
+                last = sensor.lastElementChild.firstChild,
+                matchFlow = function(event){
+                    var change = false,
+                        width = element.offsetWidth;
+                    if (x != width) {
+                        first.style.width = width - 1 + 'px';
+                        last.style.width = width + 1 + 'px';
+                        change = true;
+                        x = width;
+                    }
+                    var height = element.offsetHeight;
+                    if (y != height) {
+                        first.style.height = height - 1 + 'px';
+                        last.style.height = height + 1 + 'px';
+                        change = true;
+                        y = height;
+                    }
+                    if (change && event.currentTarget != element) fireEvent(element, 'resize');
+                };
 
-                if (window.getComputedStyle(element).position == 'static'){
-                    element.style.position = 'relative';
-                    element._resizeSensor._resetPosition = true;
-                }
-                addFlowListener(sensor, 'over', matchFlow);
-                addFlowListener(sensor, 'under', matchFlow);
-                addFlowListener(sensor.firstElementChild, 'over', matchFlow);
-                addFlowListener(sensor.lastElementChild, 'under', matchFlow);
-                element.appendChild(sensor);
-                matchFlow({});
+            if (window.getComputedStyle(element).position == 'static'){
+                element.style.position = 'relative';
+                element._resizeSensor._resetPosition = true;
             }
-            events = element._flowEvents || (element._flowEvents = []);
-            if (events.indexOf(fn) === -1) events.push(fn);
-            if (!supports_onresize) element.addEventListener('resize', fn);
-            element.onresize = function(e){
-                events.forEach(function(fn){
-                    fn.call(element, e);
-                });
-            };
+            addFlowListener(sensor, 'over', matchFlow);
+            addFlowListener(sensor, 'under', matchFlow);
+            addFlowListener(sensor.firstElementChild, 'over', matchFlow);
+            addFlowListener(sensor.lastElementChild, 'under', matchFlow);
+            element.appendChild(sensor);
+            matchFlow({});
         }
+        var events = element._flowEvents || (element._flowEvents = []);
+        if (events.indexOf(fn) === -1) events.push(fn);
+        if (!supports_onresize) element.addEventListener('resize', fn);
+        element.onresize = function(e){
+            events.forEach(function(fn){
+                fn.call(element, e);
+            });
+        };
     }
 
     function removeResizeListener(element, fn){
-        var index;
-        if (is_above_ie10 && supports_mutation_observer) {
-            index = element._mutationObservers.indexOf(fn);
-            if (index > -1) {
-                var observer = element._mutationObservers[index]._mutationObserver;
-                element._mutationObservers.splice(index, 1);
-                observer.disconnect();
-            }
-        } else {
-            var supports_onresize = 'onresize' in element;
-            index = element._flowEvents.indexOf(fn);
-            if (index > -1) element._flowEvents.splice(index, 1);
-            if (!element._flowEvents.length) {
-                var sensor = element._resizeSensor;
-                if (sensor) {
-                    element.removeChild(sensor);
-                    if (sensor._resetPosition) element.style.position = 'static';
-                    try { delete element._resizeSensor; } catch(e) { /* delete arrays not supported on IE 7 and below */}
-                }
-                if (supports_onresize) element.onresize = null;
-                try { delete element._flowEvents; } catch(e) { /* delete arrays not supported on IE 7 and below */}
-            }
-            if(!supports_onresize) element.removeEventListener('resize', fn);
+        var index,
+            supports_onresize = 'onresize' in element;
+
+        if (!supports_onresize && is_above_ie10) {
+            removeResizeWatcher(element);
         }
+        index = element._flowEvents.indexOf(fn);
+        if (index > -1) element._flowEvents.splice(index, 1);
+        if (!element._flowEvents.length) {
+            var sensor = element._resizeSensor;
+            if (sensor) {
+                element.removeChild(sensor);
+                if (sensor._resetPosition) element.style.position = 'static';
+                try { delete element._resizeSensor; } catch(e) { /* delete arrays not supported on IE 7 and below */}
+            }
+            if (supports_onresize) element.onresize = null;
+            try { delete element._flowEvents; } catch(e) { /* delete arrays not supported on IE 7 and below */}
+        }
+        if(!supports_onresize) element.removeEventListener('resize', fn);
     }
 
     var minmaxwidth = function ( node, options ) {
