@@ -6,7 +6,8 @@
 	Version <%= VERSION %>.
 
 	A decorator to add min-width and max-width media queries to elements.
-	It's based on https://github.com/FremyCompany/prollyfill-min-width/, but with a different css syntax (no hitch.js)
+	It's based on http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
+	IE11 support thanks to https://github.com/sdecima/javascript-detect-element-resize
 
 	==========================
 
@@ -218,19 +219,30 @@
     }
 
     function removeResizeListener(element, fn){
-        var index = element._flowEvents.indexOf(fn);
-        if (index > -1) element._flowEvents.splice(index, 1);
-        if (!element._flowEvents.length) {
-            var sensor = element._resizeSensor;
-            if (sensor) {
-                element.removeChild(sensor);
-                if (sensor._resetPosition) element.style.position = 'static';
-                delete element._resizeSensor;
+        var index;
+        if (is_above_ie10 && supports_mutation_observer) {
+            index = element._mutationObservers.indexOf(fn);
+            if (index > -1) {
+                var observer = element._mutationObservers[index]._mutationObserver;
+                element._mutationObservers.splice(index, 1);
+                observer.disconnect();
             }
-            if ('onresize' in element) element.onresize = null;
-            delete element._flowEvents;
+        } else {
+            var supports_onresize = 'onresize' in element;
+            index = element._flowEvents.indexOf(fn);
+            if (index > -1) element._flowEvents.splice(index, 1);
+            if (!element._flowEvents.length) {
+                var sensor = element._resizeSensor;
+                if (sensor) {
+                    element.removeChild(sensor);
+                    if (sensor._resetPosition) element.style.position = 'static';
+                    try { delete element._resizeSensor; } catch(e) { /* delete arrays not supported on IE 7 and below */}
+                }
+                if (supports_onresize) element.onresize = null;
+                try { delete element._flowEvents; } catch(e) { /* delete arrays not supported on IE 7 and below */}
+            }
+            if(!supports_onresize) element.removeEventListener('resize', fn);
         }
-        element.removeEventListener('resize', fn);
     }
 
     var minmaxwidth = function ( node, options ) {
