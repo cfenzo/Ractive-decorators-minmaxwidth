@@ -255,10 +255,9 @@
         function on_modified(){
             var minWidths = [],
                 maxWidths = [];
-            
-            breakpoints.forEach(function(width){
-                (node.offsetWidth>=parseInt(width)?minWidths:maxWidths).push(width);
-            });
+                breakpoints.forEach(function(width){
+                    (node.offsetWidth>=parseInt(width)?minWidths:maxWidths).push(width);
+                });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
             if(keypath) R.set(keypath, node.offsetWidth);

@@ -229,6 +229,27 @@
     <svg decorator="minmaxwidth:{min:[400,500,600,700],max:[400,500,600,700],keypath:'svg_width'}">
         <text y='15'>{{svg_width}}</text>
     </svg>
+    <h2>Syntax variations tests</h2>
+    <!-- just one breakpoint -->
+    <div decorator='minmaxwidth:500'>...</div>
+
+    <!-- multiple breakpoints -->
+    <div decorator='minmaxwidth:[400,600,800]'>...</div>
+
+    <!-- just one breakpoint and keypath -->
+    <div decorator='minmaxwidth:500,"test_width1"'>test: {{test_width1}}</div>
+    <div decorator='minmaxwidth:500,"test_width2"'>{{test_width2}}</div>
+
+    <!-- breakpoints and keypath -->
+    <div decorator='minmaxwidth:[400,600,800],"test_width3"'>test: {{test_width3}}</div>
+    <div decorator='minmaxwidth:[400,600,800],"test_width4"'>{{test_width4}}</div>
+
+    <!-- more verbose syntax -->
+    <div decorator="minmaxwidth:{breakpoints:[400,600,800],keypath:'test_width5'}">test: {{test_width5}}</div>
+    <div decorator="minmaxwidth:{breakpoints:[400,600,800],keypath:'test_width6'}">{{test_width6}}</div>
+
+    <!-- .. and this one too I guess -->
+    <div decorator='minmaxwidth:{min:[400,600,800],max:[400,600,800]}'>...</div>
 
     <!-- {{>items}} -->
         <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">
