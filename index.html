@@ -21,6 +21,9 @@
             max-width:48em;
             margin: 0 auto;
         }
+        h2 {
+            clear: both;
+        }
 
         #demo *, *:before, *:after {
             -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
@@ -39,6 +42,10 @@
         aside {
             float: right;
             width: 40%;
+        }
+        svg {
+            height: 200px;
+            background:#efefef;
         }
 
 
@@ -208,7 +215,7 @@
 
 	<!-- Demo template -->
 	<script id='demo-template' type='text/ractive'>
-    <section class="container" decorator="minmaxwidth:{max:500,keypath:'width'}">
+    <section class="container" decorator="minmaxwidth:[500],'width'">
         <h2>{{width}}px wide</h2>
         {{>items}}
         <article>
@@ -218,6 +225,10 @@
             {{>items}}
         </aside>
     </section>
+    <h2>SVG:</h2>
+    <svg decorator="minmaxwidth:{min:[400,500,600,700],max:[400,500,600,700],keypath:'svg_width'}">
+        <text y='15'>{{svg_width}}</text>
+    </svg>
 
     <!-- {{>items}} -->
         <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">

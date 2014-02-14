@@ -5,9 +5,16 @@
 
 	Version <%= VERSION %>.
 
-	A decorator to add min-width and max-width media queries to elements.
-	It's based on http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
-	IE11 support thanks to https://github.com/sdecima/javascript-detect-element-resize
+    This decorator provides Element Media Queries by setting data-attributes for every matched min/max widths in the decorator options.
+    It will also set the current width as a variable on the Ractive instance if you provide a keypath in the options.
+
+	The resize-detection is based on http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/
+	with a setInterval-fallback for for browsers with none of the following events on elements:
+	    - over/underflow events
+	    - OverflowEvent/overflowchanged event
+	    - onresize (IE11 removed 'onresize' events in favor of Mutators. But the mutators doesn't trigger on css/non-js triggered changes..)
+
+	A big thank you to https://github.com/sdecima, which research on IE11's lack of onresize events and the Mutators shortcomings made my life so much easier.
 
 	==========================
 
@@ -125,6 +132,9 @@
         }
     }
 
+    function usePollResizer(element,supports_onresize){
+        return (!supports_onresize && no_flowevents) || !(!element.namespaceURI || element.namespaceURI === 'http://www.w3.org/1999/xhtml');
+    }
     function addResizePoller(element){
         if(_poller_elements.indexOf(element) === -1) _poller_elements.push(element);
         if(!_poller_runner) _poller_runner = window.setInterval(function(){
@@ -161,7 +171,7 @@
 
     function addResizeListener(element, fn, sensorClass){
         var supports_onresize = 'onresize' in element;
-        if(!supports_onresize && no_flowevents){
+        if(usePollResizer(element,supports_onresize)){
             addResizePoller(element);
         }else if (!supports_onresize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
@@ -226,35 +236,54 @@
             }
             if (supports_onresize) element.onresize = null;
             try { delete element._resizeEvents; } catch(e) { /* delete arrays not supported on IE 7 and below */}
-            if (!supports_onresize && no_flowevents) removeResizePoller(element); // only call removeResizePoller when there's no resize events left on the element
+            if(usePollResizer(element,supports_onresize)) removeResizePoller(element); // only call removeResizePoller when there's no resize events left on the element
         }
         if(!supports_onresize) element.removeEventListener('resize', fn);
     }
 
-    var minmaxwidth = function ( node, options ) {
-        var min, max, keypath, R;
+    var minmaxwidth = function( node ){
+        var breakpoints,
+            keypath,
+            min,
+            max,
+            R = node._ractive.root;
+
+        if(arguments.length < 2) {
+            throw new Error( 'No parameters provided for minmaxwidth decorator.' );
+        }
 
         function on_modified(){
-            var minWidths = min.filter(function(width){
-                    return node.offsetWidth>=parseInt(width);
-                }),
-                maxWidths = max.filter(function(width){
-                    return node.offsetWidth<parseInt(width);
-                });
+            var minWidths = [],
+                maxWidths = [];
+            
+            breakpoints.forEach(function(width){
+                (node.offsetWidth>=parseInt(width)?minWidths:maxWidths).push(width);
+            });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
-            if(keypath) R.set(keypath,node.offsetWidth);
+            if(keypath) R.set(keypath, node.offsetWidth);
             node.className = node.className; // ugly IE8 hack to reset styles
         }
 
-        options = options || {};
-        min = options.min || [];
-        max = options.max || [];
-        keypath = options.keypath || false;
-        R = node._ractive.root;
+        if(Object.prototype.toString.call(arguments[1]).slice(8, -1).toLowerCase() === 'object'){
+            breakpoints = arguments[1].breakpoints || [];
+            min = arguments[1].min || [];
+            max = arguments[1].max || [];
+            keypath = arguments[1].keypath || false;
 
-        if(!Array.isArray(min)) min = [min];
-        if(!Array.isArray(max)) max = [max];
+            if(!Array.isArray(breakpoints)) breakpoints = [breakpoints];
+            if(!Array.isArray(min)) min = [min];
+            if(!Array.isArray(max)) max = [max];
+
+            min.concat(max).forEach(function(val){
+               if(breakpoints.indexOf(val) === -1) breakpoints.push(val);
+            });
+        }else{
+            // got array
+            breakpoints = Array.isArray(arguments[1]) ? arguments[1] : [arguments[1]];
+            if(arguments.length > 2 && typeof arguments[2] === 'string') keypath = arguments[2];
+        }
+
 
         // add pretty events
         addResizeListener(node, on_modified, minmaxwidth.sensorClass);
@@ -266,6 +295,7 @@
                 removeResizeListener(node);
             }
         };
+
     };
 
     // defaults
