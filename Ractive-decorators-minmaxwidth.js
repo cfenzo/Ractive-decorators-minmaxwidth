@@ -115,7 +115,7 @@
 
     function addSensorStyles(sensorClass){
         if(!styles_added[sensorClass]){
-            var style = '.'+sensorClass+', .'+sensorClass+' > div {position: absolute;top: 0;left: 0;width: 100%;height: 100%;overflow: hidden;z-index: -1;}';
+            var style = '.'+sensorClass+', .'+sensorClass+' div {position: static !important;margin:0 !important;padding:0 !important;border:none !important;} .'+sensorClass+', .'+sensorClass+' > div {position: absolute !important;top: 0 !important;left: 0 !important;width: 100% !important;height: 100% !important;overflow: hidden !important;z-index: -1 !important;}';
             if(!stylesheet){
                 stylesheet = document.createElement('style');
                 stylesheet.type = 'text/css';
