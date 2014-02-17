@@ -249,7 +249,7 @@
             R = node._ractive.root;
 
         if(arguments.length < 2) {
-            throw new Error( 'No parameters provided for minmaxwidth decorator.' );
+            throw new Error( 'Ractive-decorators-minmaxwidth needs at least one argument. See http://cfenzo.github.io/Ractive-decorators-minmaxwidth/ for documentation and examples.' );
         }
 
         function on_modified(){
