@@ -249,18 +249,19 @@
             R = node._ractive.root;
 
         if(arguments.length < 2) {
-            throw new Error( 'No parameters provided for minmaxwidth decorator.' );
+            throw new Error( 'Ractive-decorators-minmaxwidth needs at least one argument. See http://cfenzo.github.io/Ractive-decorators-minmaxwidth/ for documentation and examples.' );
         }
 
         function on_modified(){
             var minWidths = [],
-                maxWidths = [];
+                maxWidths = [],
+                node_width = node.offsetWidth;
                 breakpoints.forEach(function(width){
-                    (node.offsetWidth>=parseInt(width)?minWidths:maxWidths).push(width);
+                    (node_width>=parseInt(width)?minWidths:maxWidths).push(width);
                 });
             node.setAttribute('data-min-width',minWidths.join(' '));
             node.setAttribute('data-max-width',maxWidths.join(' '));
-            if(keypath) R.set(keypath, node.offsetWidth);
+            if(keypath) R.set(keypath, node_width);
             node.className = node.className; // ugly IE8 hack to reset styles
         }
 
