@@ -7,6 +7,11 @@ Ractive.js minmaxwidth decorator
 
 This decorator provides **"Element Media Queries"** by setting *data-attributes* for every matched provided breakpoint.
 It will also set the current width as a variable on the Ractive instance when a `keypath` is provided.
+```html
+<div class="item" decorator="minmaxwidth:[100,200],'keypath'">
+    Something something {{keypath}}
+</div>
+```
 
 You can then do CSS **"Element Media Queries"** by matching the *data-attributes* like this:
 ```css
