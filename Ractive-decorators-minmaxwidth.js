@@ -35,22 +35,42 @@
 	    // the return value
 	    require( 'Ractive-decorators-minmaxwidth' );
 
-    Add the decorator in your template with one or more of these options:
+    Use the decorator in your template with any of the following syntaxes (explanation of the variables in the "options" syntax):
 
-        * `min` Array of min-widths (or single width) to match against [optional]
-        * `max` Array of max-widths (or single width) to match against [optional]
-        * `keypath` Keypath to use for setting the current width in the Ractive instance [optional]
+    A single breakpoint:
+        <div class="item" decorator="minmaxwidth:100">
+        html content
+        </div>
 
-        <div class="item" decorator="minmaxwidth:{min:[100,200],max:200,keypath:'my_width'}">
+    An array of breakpoints:
+        <div class="item" decorator="minmaxwidth:[100,200]">
+        html content
+        </div>
+
+    A single breakpoint and a keypath:
+        <div class="item" decorator="minmaxwidth:[100,200],'my_width'">
+        {{my_width}}
+        </div>
+
+    An array of breakpoints and a keypath:
+        <div class="item" decorator="minmaxwidth:[100,200],'my_width'">
+        {{my_width}}
+        </div>
+
+    An object with one or more of these keys:
+        - breakpoints   - Array of breakpoints (or single breakpoint) to match against, both min and max will be added based on these [optional]
+        - keypath       - Keypath to use for setting the current width in the Ractive instance [optional]
+        - min           - (Deprecated) Array of min-widths (or single width) to match against [optional]~~ (Deprecated. Can still be used, but the widths are added as `breakpoints`, and both min/max data-attributes are added pr width)
+        - max           - (Deprecated) Array of max-widths (or single width) to match against [optional]~~ (Deprecated. Can still be used, but the widths are added as `breakpoints`, and both min/max data-attributes are added pr width)
+
+        <div class="item" decorator="minmaxwidth:{breakpoints:[100,200],keypath:'my_width'}">
         {{my_width}}
         </div>
 
     The decorator will add `data-min-width` and `data-max-width` attributes holding a space-delimited list of matched min/max values, and set the given keypath to the current width (not just if it matches one of the min/max values):
-
-        <div class="item" data-min-width="100 200" data-max-width="200">200</div>
+        <div class="item" data-min-width="100" data-max-width="200">199</div>
 
     You then use the `~=` attribute-selector to write styles targeting the specific min/max values:
-
         .item[data-min-width~="100"] {
         ...
         }
