@@ -226,10 +226,10 @@
         </aside>
     </section>
     <h2>SVG:</h2>
-    <svg decorator="minmaxwidth:[400,500,600,700],'svg_width'}">
+    <svg decorator="minmaxwidth:[400,500,600,700],'svg_width'">
         <text y='15'>{{svg_width}}</text>
     </svg>
-    <h2>Syntax variations tests</h2>
+    <h2>Syntax variations tests (see template/source)</h2>
     <!-- just one breakpoint -->
     <div decorator='minmaxwidth:500'>...</div>
 
@@ -237,15 +237,18 @@
     <div decorator='minmaxwidth:[400,600,800]'>...</div>
 
     <!-- just one breakpoint and keypath -->
-    <div decorator='minmaxwidth:500,"test_width1"'>width: {{test_width1}}</div>
+    <div decorator='minmaxwidth:500,"test_width1"'>{{test_width1}}</div>
 
-    <!-- breakpoints and keypath -->
-    <div decorator='minmaxwidth:[400,600,800],"test_width3"'>width: {{test_width3}}</div>
+    <!-- multiple breakpoints and keypath -->
+    <div decorator='minmaxwidth:[400,600,800],"test_width2"'>{{test_width2}}</div>
 
-    <!-- more verbose syntax -->
-    <div decorator="minmaxwidth:{breakpoints:[400,600,800],keypath:'test_width5'}">width: {{test_width5}}</div>
+    <!-- object syntax -->
+    <div decorator="minmaxwidth:{breakpoints:[400,600,800],keypath:'test_width3'}">{{test_width3}}</div>
 
-    <!-- .. and this one too I guess -->
+    <!-- object syntax, only keypath -->
+    <div decorator="minmaxwidth:{keypath:'test_width4'}">{{test_width4}}</div>
+
+    <!-- backwards compatible with old min/max syntax -->
     <div decorator='minmaxwidth:{min:[400,600,800],max:[400,600,800]}'>...</div>
 
     <!-- {{>items}} -->
