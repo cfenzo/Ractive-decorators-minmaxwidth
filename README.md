@@ -104,7 +104,7 @@ Configurable defaults
 -----
 These decorator-defaults are exposed so they can be overwritten if needed (defaults should work fine)
 ```javascript
-// the interval for the poller-fallback (for IE11 and other browsers with no support for onresize, over/underflow and flowchanged events on elements)
+// how often the poller-fallback should poll for changes (for IE11 and other browsers with no support for onresize, over/underflow and flowchanged events on elements, uses setInterval)
 Ractive.decorators.minmaxwidth.pollerInterval = 250;
 // the classname used on the sensor-html (for firefox and webkit-based browsers)
 Ractive.decorators.minmaxwidth.sensorClass = 'resize-sensor';
