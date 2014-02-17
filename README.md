@@ -82,6 +82,7 @@ Use the decorator in your template with any of the following syntaxes (explanati
 </div>
 ```
 
+### Result
 The decorator will add `data-min-width` and `data-max-width` attributes holding a space-delimited list of matched min/max values, and set the given `keypath` to the current width (not just if it matches one of the min/max values):
 
 ```html
@@ -92,7 +93,7 @@ The decorator will add `data-min-width` and `data-max-width` attributes holding 
 <div class="item" data-min-width="100 200" data-max-width="300">299</div>
 ```
 
-You then use the `~=` attribute-selector to write styles targeting the specific min/max values:
+Using the `~=` attribute-selector you can write styles targeting the specific min/max values:
 ```css
 .item[data-min-width~="100"] {
   ...
