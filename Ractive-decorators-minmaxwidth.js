@@ -225,11 +225,11 @@
                 element.style.position = 'relative';
                 element._resizeSensor._resetPosition = true;
             }
+            element.appendChild(sensor);
             addFlowListener(sensor, 'over', matchFlow);
             addFlowListener(sensor, 'under', matchFlow);
             addFlowListener(sensor.firstElementChild, 'over', matchFlow);
             addFlowListener(sensor.lastElementChild, 'under', matchFlow);
-            element.appendChild(sensor);
             matchFlow({});
         }
         var events = element._resizeEvents || (element._resizeEvents = []);
