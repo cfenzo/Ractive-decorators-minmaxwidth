@@ -283,10 +283,9 @@
             if(arguments.length > 2 && typeof arguments[2] === 'string') keypath = arguments[2];
         }
 
-
+        on_modified(); // run on initialization
         // add pretty events
         addResizeListener(node, on_modified, minmaxwidth.sensorClass);
-        on_modified(); // run on initialization
 
         return {
             teardown: function () {
