@@ -102,9 +102,9 @@ You then use the `~=` attribute-selector to write styles targeting the specific 
 
 Known issues
 -----
-* Tags without content will not trigger changes/events in Chrome and Firefox `<div decorator="minmaxwidth:300"></div>` ( See [#5](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/5) for more info)
-* "greedy" CSS that adds targets `div` elements inside the decorated element can cause the resize events to fail ( See [#2](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/2) for more info)
-* Although the `<svg>` element itself is supported (through polling-fallback), `svg` code inside the element is not for the time being. This will be added if possible. ( See [#4](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/4) for more info and progress)
+* Tags without content will not trigger changes/events in Firefox and webkit-based browsers, ex: `<div decorator="minmaxwidth:300"></div>` ( See [#5](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/5) for more info)
+* "greedy" CSS that targets `div` elements inside the decorated element can cause the resize events to fail. ( See [#2](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/2) for more info)
+* Although the `<svg>` element itself is supported (through the polling-fallback), `svg` code inside the element is not for the time being. The goal is to add this later. ( See [#4](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/4) for more info and progress)
 
 
 License
