@@ -146,8 +146,8 @@
     In this example, the following values are possible:
 
     for .list:
-        min-width: 400,600
-        max-width: 400
+        min-width: 300,400,600
+        max-width: 300,400,600
 
     for .container:
         max-width: 500
@@ -226,7 +226,7 @@
         </aside>
     </section>
     <h2>SVG:</h2>
-    <svg decorator="minmaxwidth:{min:[400,500,600,700],max:[400,500,600,700],keypath:'svg_width'}">
+    <svg decorator="minmaxwidth:[400,500,600,700],'svg_width'}">
         <text y='15'>{{svg_width}}</text>
     </svg>
     <h2>Syntax variations tests</h2>
@@ -249,7 +249,7 @@
     <div decorator='minmaxwidth:{min:[400,600,800],max:[400,600,800]}'>...</div>
 
     <!-- {{>items}} -->
-        <ul class="list" decorator="minmaxwidth:{min:[300,600,400],max:400}">
+        <ul class="list" decorator="minmaxwidth:[300,600,400]">
             <li><span>Item 1</span></li>
             <li><span>Item 2</span></li>
             <li><span>Item 3</span></li>
