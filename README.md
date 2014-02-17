@@ -100,6 +100,18 @@ You then use the `~=` attribute-selector to write styles targeting the specific 
 [See the demo with more CSS examples here.](http://cfenzo.github.io/Ractive-decorators-minmaxwidth/)
 
 
+Configurable defaults
+-----
+These decorator-defaults are exposed so they can be overwritten if needed (defaults should work fine)
+```javascript
+// the interval for the poller-fallback (for IE11 and other browsers with no support for onresize, over/underflow and flowchanged events on elements)
+minmaxwidth.pollerInterval = 250;
+// the classname used on the sensor-html (for firefox and webkit-based browsers)
+minmaxwidth.sensorClass = 'resize-sensor';
+// should sensor styles be added by the script? (PS. the sensor styles must be provided, the resize listener will not work without them)
+minmaxwidth.addSensorStyles = true;
+```
+
 Known issues
 -----
 * "greedy" CSS that targets `div` elements inside the decorated element can cause the resize events to fail. ( See [#2](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/2) for more info)
