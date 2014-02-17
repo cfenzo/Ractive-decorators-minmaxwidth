@@ -196,7 +196,7 @@
         }else if (!supports_onresize && !element._resizeSensor) {
             var sensor = element._resizeSensor = document.createElement('div');
             sensor.className = sensorClass || 'resize-sensor';
-            sensor.innerHTML = '<div><div></div></div><div><div></div></div>';
+            sensor.innerHTML = '<div><div>&nbsp;</div></div><div><div>&nbsp;</div></div>';
             addSensorStyles(sensorClass);
 
             var x = 0, y = 0,
@@ -225,11 +225,11 @@
                 element.style.position = 'relative';
                 element._resizeSensor._resetPosition = true;
             }
-            element.appendChild(sensor);
             addFlowListener(sensor, 'over', matchFlow);
             addFlowListener(sensor, 'under', matchFlow);
             addFlowListener(sensor.firstElementChild, 'over', matchFlow);
             addFlowListener(sensor.lastElementChild, 'under', matchFlow);
+            element.appendChild(sensor);
             matchFlow({});
         }
         var events = element._resizeEvents || (element._resizeEvents = []);
