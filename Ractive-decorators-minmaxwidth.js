@@ -111,7 +111,6 @@
     var styles_added = [],
         stylesheet,
         no_flowevents = ( (!(window.ActiveXObject) && "ActiveXObject" in window) || !('UIEvent' in window) ), // this is ugly, but we have to live with it..
-        _poller_interval = 250,
         _poller_runner,
         _poller_elements = [];
 
@@ -168,7 +167,7 @@
                     fireEvent(element,'resize');
                 }
             });
-        },_poller_interval);
+        },minmaxwidth.pollerInterval);
     }
     function removeResizePoller(element){
         var index = _poller_elements.indexOf(element);
@@ -197,7 +196,7 @@
             var sensor = element._resizeSensor = document.createElement('div');
             sensor.className = sensorClass || 'resize-sensor';
             sensor.innerHTML = '<div><div>&nbsp;</div></div><div><div>&nbsp;</div></div>';
-            addSensorStyles(sensorClass);
+            if(minmaxwidth.addSensorStyles) addSensorStyles(sensorClass);
 
             var x = 0, y = 0,
                 first = sensor.firstElementChild.firstChild,
@@ -319,6 +318,8 @@
 
     // defaults
     minmaxwidth.sensorClass = 'resize-sensor';
+    minmaxwidth.addSensorStyles = true;
+    minmaxwidth.pollerInterval = 250;
 
     Ractive.decorators.minmaxwidth = minmaxwidth;
 }));
