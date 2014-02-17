@@ -105,11 +105,11 @@ Configurable defaults
 These decorator-defaults are exposed so they can be overwritten if needed (defaults should work fine)
 ```javascript
 // the interval for the poller-fallback (for IE11 and other browsers with no support for onresize, over/underflow and flowchanged events on elements)
-minmaxwidth.pollerInterval = 250;
+Ractive.decorators.minmaxwidth.pollerInterval = 250;
 // the classname used on the sensor-html (for firefox and webkit-based browsers)
-minmaxwidth.sensorClass = 'resize-sensor';
+Ractive.decorators.minmaxwidth.sensorClass = 'resize-sensor';
 // should sensor styles be added by the script? (PS. the sensor styles must be provided, the resize listener will not work without them)
-minmaxwidth.addSensorStyles = true;
+Ractive.decorators.minmaxwidth.addSensorStyles = true;
 ```
 
 Known issues
