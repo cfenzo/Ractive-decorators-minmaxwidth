@@ -58,7 +58,7 @@ An array of breakpoints:
 
 A single breakpoint and a keypath:
 ```html
-<div class="item" decorator="minmaxwidth:[100,200],'my_width'">
+<div class="item" decorator="minmaxwidth:100,'my_width'">
     {{my_width}}
 </div>
 ```
