@@ -122,14 +122,13 @@ Ractive.decorators.minmaxwidth.addSensorStyles = true;
 
 Known issues
 -----
-* "greedy" CSS that targets `div` elements inside the decorated element can cause the resize events to fail. ( See [#2](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/2) for more info)
-* Although the `<svg>` element itself is supported (through the polling-fallback), `svg` code inside the element is not for the time being. The goal is to add this later. ( See [#4](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/4) for more info and progress)
+* "greedy" CSS that targets `object` elements inside the decorated element can cause the resize events to fail. ( See [#2](https://github.com/cfenzo/Ractive-decorators-minmaxwidth/issues/2) for more info)
 
 
 License
 -------
 
-Based on [Back Alley Coder's "Cross-Browser, Event-based, Element Resize Detection"](http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/)
+Based on [Back Alley Coder's "Element Queries, From the Feet Up"](http://www.backalleycoder.com/2014/04/18/element-queries-from-the-feet-up/)
 
 Copyright (c) 2014 Jens Anders Bakke. Licensed MIT
 
