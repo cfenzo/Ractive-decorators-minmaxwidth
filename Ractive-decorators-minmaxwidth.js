@@ -3,7 +3,7 @@
  Ractive-decorators-minmaxwidth
  ==============================
 
- Version 0.1.0.
+ Version 0.2.0.
 
  This decorator provides Element Media Queries by setting data-attributes for every matched min/max widths in the decorator options.
  It will also set the current width as a variable on the Ractive instance if you provide a keypath in the options.
