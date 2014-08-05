@@ -209,7 +209,7 @@
 
 
 	<footer>
-        <p>Based on <a href="http://www.backalleycoder.com/2013/03/18/cross-browser-event-based-element-resize-detection/">Back Alley Coder's "Cross-Browser, Event-based, Element Resize Detection"</a></p>
+        <p>Based on <a href="http://www.backalleycoder.com/2014/04/18/element-queries-from-the-feet-up/">Back Alley Coder's "Element Queries, From the Feet Up"</a></p>
 		<p>Copyright &copy; 2014 Jens Anders Bakke. Licensed MIT</p>
 	</footer>
 
@@ -226,8 +226,12 @@
         </aside>
     </section>
     <h2>SVG:</h2>
-    <svg decorator="minmaxwidth:[400,500,600,700],'svg_width'">
-        <text y='15'>{{svg_width}}</text>
+    <svg decorator="minmaxwidth:[400,500,600,700],'svg_width'" width="100%">
+        <text y='15'>width: {{svg_width}}</text>
+        <rect x="0" y="30" width="70%" height="100" style="fill:pink" decorator="minmaxwidth:[400,500,600,700],'svg_width_pink'"></rect>
+        <rect x="70%" y="30" width="30%" height="100" style="fill:lime" decorator="minmaxwidth:[400,500,600,700],'svg_width_lime'"></rect>
+        <text y="50" x='0%' style="fill:lime">{{svg_width_pink}}</text>
+        <text y="50" x='70%' style="fill:pink">{{svg_width_lime}}</text>
     </svg>
     <h2>Syntax variations tests (see template/source)</h2>
     <!-- just one breakpoint -->
@@ -265,11 +269,10 @@
 
 	<!-- Dependencies -->
 	<script src='lib/Ractive-legacy.js'></script>
-	<script src='Ractive-decorators-minmaxwidth.js'></script>
+	<script src='src/Ractive-decorators-minmaxwidth.js'></script>
 
 	<!-- Demo code -->
 	<script id='demo-code'>
-		// TODO
 		ractive = new Ractive({
 			el: 'demo',
 			template: '#demo-template'
